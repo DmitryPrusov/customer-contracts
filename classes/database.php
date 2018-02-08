@@ -31,6 +31,7 @@ class Database {
     // чтобы получить ассоциативный массив:
     public function runQuery($query) {
         $result = mysqli_query($this->_connection, $query);
+        $resultset = [];
         while($row=mysqli_fetch_assoc($result)) {
             $resultset[] = $row;
         }

@@ -1,5 +1,5 @@
 
-<table style="">
+<table style="display:none" id="client-card">
     <tr>
         <td colspan="2"><b>Информация про клиента</b></td>
     </tr>
@@ -18,7 +18,7 @@
     </tr>
     <tr>
         <td>Номер договора</td>
-        <td>[ number]</td>
+        <td>[number]</td>
     </tr>
 
     <tr>
