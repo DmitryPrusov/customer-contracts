@@ -14,11 +14,11 @@
     <b> Status:</b>
     <br>
     <input type="checkbox" name="checkboxvar[]" value="work">work<br>
-    <input type="checkbox" name="checkboxvar[]" value="connected"> connected<br>
+    <input type="checkbox" name="checkboxvar[]" value="connecting"> connecting<br>
     <input type="checkbox" name="checkboxvar[]" value="disconnected"> disconnected <br>
     <input type="submit" value="отправить">
 </form>
-<?php include 'includes/card.php'; ?>
+<div id="card-container"></div>
 </body>
 </html>
 
@@ -42,18 +42,34 @@
 
         var form = $('#our-form');
         form.submit(function (e) {
+            $('#card-container').html('');
             e.preventDefault();
             $.ajax({
                 url: form.attr('action'),
                 type: form.attr('method'),
                 data: form.serialize(),
                 success: function (data) {
-                    var data = typeof data == 'string' ? jQuery.parseJSON(data) : data;
+                    var data = typeof data == 'string' ? $.parseJSON(data) : data;
                     if (data.result === 'success') {
-                        alert('Есть такой клиент!');
-                        $('#client-card').show();
-                    } else {
-                        alert('Такого клиента нет!');
+                        var html = '';
+                        $.each(data.cards, function (i, ob) {
+                            html += '<table id="client-card-' + i +'">' +
+                                    '<tr> <td colspan="2"><b>Информация про клиента</b></td> </tr>' +
+                                '<tr>  <td>Название клиента</td> <td>' +ob.name_customer + '</td> </tr>' +
+                                '<tr>  <td>Компания</td> <td>' + ob.company +'</td> </tr>' +
+                                '<tr> <td colspan="2"><b>Информация про договор</b></td> </tr>' +
+                                '<tr>  <td>Номер Договора</td> <td>' +ob.id_contract + '</td> </tr>' +
+                                '<tr>  <td>Дата подписания</td> <td>' + ob.date_sign +'</td> </tr>' +
+
+                                '<tr> <td colspan="2"><b>Информация про сервисы</b></td> </tr>' +
+                                '<tr>  <td>Название сервиса</td> <td>' +ob.title_service + '</td> </tr>' +
+                                '<tr>  <td>Статус</td> <td>' + ob.status +'</td> </tr> <br> <br>';
+
+                        });
+                        $('#card-container').html(html);
+                    }
+                    else {
+                        alert(data.text_error);
                     }
                 }
             });
